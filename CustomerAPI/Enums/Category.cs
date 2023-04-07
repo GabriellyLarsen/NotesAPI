@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace NotesAPI.Models.Enums
+namespace NotesAPI.Enums
 {
     public enum Category
     {

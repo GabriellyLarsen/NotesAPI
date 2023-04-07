@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NotesAPI.Models.Enums;
+using NotesAPI.Enums;
 using NotesAPI.Models.Requests;
 using NotesAPI.Models.Responses;
 using System.Diagnostics;
 
 namespace NotesAPI.Controllers
 {
-    public class NotesController
+    public class NotesController: ControllerBase
     {
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -14,9 +14,22 @@ namespace NotesAPI.Controllers
         public IActionResult Post(CreateNotesRequest noteRequest)
         {
             bool validation = GetValidationResult(noteRequest);
+
+            if (!validation)
+            {
+                CreateNotesResponse createNotesResponse = new CreateNotesResponse()
+                {
+                    ResultCode = "ERROR",
+                    Message = "Invalid request"
+
+                };
+                createNotesResponse.ResultCode = StatusCode(StatusCodes.Status400BadRequest, createNotesResponse);
+            }
+
             //later the response will come from the DB
             //we will need a mapper here as well to set the DB info as CreateNotesResponse
             //for now, a dummy response
+
             CreateNotesResponse response = new CreateNotesResponse()
             {
 
@@ -27,14 +40,18 @@ namespace NotesAPI.Controllers
 
         private bool GetValidationResult(CreateNotesRequest noteRequest)
         {
+            bool isValid = true;
+
             Category category = noteRequest.Category; 
             string title = noteRequest.Title;
-            Nullable<DateTime> targetDate = noteRequest.TargetDate;
+            DateTime? targetDate = noteRequest.TargetDate;
 
             if (string.IsNullOrEmpty(category.ToString()) || string.IsNullOrEmpty(title) || !targetDate.HasValue)
             {
-                CreateNotesResponse notesResponse = new CreateNotesResponse();
+                isValid = false;
             }
+
+            return isValid;
         }
 
     }

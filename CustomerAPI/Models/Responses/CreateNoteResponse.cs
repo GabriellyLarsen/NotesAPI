@@ -2,7 +2,7 @@
 {
     public class CreateNotesResponse
     {
-        string ResultCode { get; set; } 
-        string Message { get; set; }
+        public string ResultCode { get; set; } 
+        public string Message { get; set; }
     }
 }
