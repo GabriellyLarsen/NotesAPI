@@ -5,7 +5,7 @@ namespace NotesAPI.Entities
     public class Note
     {
         public int Id { get; set; }
-        public Category Category { get; set; }
+        public int CategoryId { get; set; }
         public string Title { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? TargetDate { get; set; }
