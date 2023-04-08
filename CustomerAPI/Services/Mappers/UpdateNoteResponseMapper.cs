@@ -4,14 +4,14 @@ using NotesAPI.Models.Responses;
 
 namespace NotesAPI.Services.Mappers
 {
-    public interface IUpdateNotesResponseMapper
+    public interface IUpdateNoteResponseMapper
     {
         UpdateNoteResponse UpdateNoteResponseMap(Note noteResponse_DB);
     }
-    public class UpdateNotesResponseMapper
+    public class UpdateNoteResponseMapper
     {
-        private readonly IUpdateNotesResponseMapper _updateNoteResponseMapper;
-        public UpdateNotesResponseMapper(IUpdateNotesResponseMapper updateNoteResponseMapper)
+        private readonly IUpdateNoteResponseMapper _updateNoteResponseMapper;
+        public UpdateNoteResponseMapper(IUpdateNoteResponseMapper updateNoteResponseMapper)
         {
             _updateNoteResponseMapper = updateNoteResponseMapper;
         }

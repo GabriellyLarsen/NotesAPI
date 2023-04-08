@@ -1,4 +1,6 @@
-﻿namespace NotesAPI.Models.Requests
+﻿using NotesAPI.Enums;
+
+namespace NotesAPI.Models.Requests
 {
     public class UpdateNoteRequest
     {

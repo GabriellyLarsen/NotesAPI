@@ -17,7 +17,7 @@ namespace NotesAPI.Controllers
         private readonly IGetNoteResponseMapper _getNoteResponseMapper;
         private readonly ICreateNoteResponseMapper _createNoteResponseMapper;
         private readonly IUpdateNoteRequestMapper _updateNoteRequestMapper;
-        private readonly IUpdateNotesResponseMapper _updateNoteResponseMapper;
+        private readonly IUpdateNoteResponseMapper _updateNoteResponseMapper;
 
 
         public NotesController(IServiceProviderHandler serviceProviderHandler, AppDbContext appDbContext) 
@@ -27,7 +27,7 @@ namespace NotesAPI.Controllers
             _getNoteResponseMapper = _serviceProviderHandler.GetRequiredService<IGetNoteResponseMapper>();
             _createNoteResponseMapper = _serviceProviderHandler.GetRequiredService<ICreateNoteResponseMapper>();
             _updateNoteRequestMapper = _serviceProviderHandler.GetRequiredService<IUpdateNoteRequestMapper>();
-            _updateNoteResponseMapper = _serviceProviderHandler.GetRequiredService<IUpdateNotesResponseMapper>();
+            _updateNoteResponseMapper = _serviceProviderHandler.GetRequiredService<IUpdateNoteResponseMapper>();
             _appDbContext = appDbContext;
         }
 
@@ -101,12 +101,12 @@ namespace NotesAPI.Controllers
 
         }
 
-        [HttpPut]
-        [Route("notes/deleteNote")]
-        public IActionResult DeleteNote()
-        {
+        //[HttpPut]
+        //[Route("notes/deleteNote")]
+        //public IActionResult DeleteNote()
+        //{
 
-        }
+        //}
 
         private bool GetValidationResult(CreateNoteRequest noteRequest)
         {
