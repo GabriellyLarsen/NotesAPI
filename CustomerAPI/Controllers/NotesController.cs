@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NotesAPI.Context;
 using NotesAPI.Enums;
 using NotesAPI.Models.Requests;
 using NotesAPI.Models.Responses;
@@ -8,6 +9,13 @@ namespace NotesAPI.Controllers
 {
     public class NotesController: ControllerBase
     {
+        private readonly AppDbContext _appDbContext;
+
+        public NotesController(AppDbContext appDbContext)
+        {
+            _appDbContext = appDbContext; 
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -23,7 +31,7 @@ namespace NotesAPI.Controllers
                     Message = "Invalid request"
 
                 };
-                createNotesResponse.ResultCode = StatusCode(StatusCodes.Status400BadRequest, createNotesResponse);
+                return StatusCode(StatusCodes.Status400BadRequest, createNotesResponse);
             }
 
             //later the response will come from the DB

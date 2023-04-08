@@ -4,7 +4,6 @@ namespace NotesAPI.Enums
 {
     public enum Category
     {
-        None,
         [Description("Meetings, important dues, etc")]
         Work,
         [Description("Birthday parties, weddings, etc")]
