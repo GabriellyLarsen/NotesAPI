@@ -1,31 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NotesAPI.Context;
+using NotesAPI.Entities;
 using NotesAPI.Enums;
 using NotesAPI.Models.Requests;
 using NotesAPI.Models.Responses;
-using System.Diagnostics;
+using NotesAPI.Services;
+using NotesAPI.Services.Mappers;
 
 namespace NotesAPI.Controllers
 {
     public class NotesController: ControllerBase
     {
-        private readonly AppDbContext _appDbContext;
-
-        public NotesController(AppDbContext appDbContext)
-        {
-            _appDbContext = appDbContext; 
+        private readonly IServiceProviderHandler _serviceProviderHandler;
+        private readonly ICreateNoteRequestMapper _createNoteRequestMapper;
+        public NotesController(IServiceProviderHandler serviceProviderHandler) 
+        { 
+            _serviceProviderHandler = serviceProviderHandler;
+            _createNoteRequestMapper = _serviceProviderHandler.GetRequiredService<ICreateNoteRequestMapper>();
         }
+
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post(CreateNotesRequest noteRequest)
+        public IActionResult Post(CreateNoteRequest noteRequest)
         {
             bool validation = GetValidationResult(noteRequest);
 
             if (!validation)
             {
-                CreateNotesResponse createNotesResponse = new CreateNotesResponse()
+                CreateNoteResponse createNotesResponse = new CreateNoteResponse()
                 {
                     ResultCode = "ERROR",
                     Message = "Invalid request"
@@ -34,11 +37,15 @@ namespace NotesAPI.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, createNotesResponse);
             }
 
+            Note noteRequest_DB = _createNoteRequestMapper.CreateNoteRequestMap(noteRequest);
+
+            // call to DB passing noteRequest_DB --> 
             //later the response will come from the DB
             //we will need a mapper here as well to set the DB info as CreateNotesResponse
             //for now, a dummy response
+            //aa
 
-            CreateNotesResponse response = new CreateNotesResponse()
+            CreateNoteResponse response = new CreateNoteResponse()
             {
 
             };
@@ -46,7 +53,7 @@ namespace NotesAPI.Controllers
             return new CreatedResult(string.Empty, response);
         }
 
-        private bool GetValidationResult(CreateNotesRequest noteRequest)
+        private bool GetValidationResult(CreateNoteRequest noteRequest)
         {
             bool isValid = true;
 
