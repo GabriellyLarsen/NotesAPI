@@ -8,20 +8,14 @@ namespace NotesAPI.Services.Mappers
     {
         CreateNoteResponse CreateNoteResponseMap(Note noteResponse_DB);
     }
-    public class CreateNoteResponseMapper
+    public class CreateNoteResponseMapper : ICreateNoteResponseMapper
     {
-        private readonly ICreateNoteResponseMapper _createNoteResponseMapper;
-        public CreateNoteResponseMapper(ICreateNoteResponseMapper createNoteResponseMapper)
-        {
-            _createNoteResponseMapper = createNoteResponseMapper;
-        }
-
         public CreateNoteResponse CreateNoteResponseMap(Note createNoteResponse_DB)
         {
             CreateNoteResponse createNoteResponse = new CreateNoteResponse();
 
             createNoteResponse.NoteId = createNoteResponse_DB.Id;
-            createNoteResponse.Category = (Category)createNoteResponse_DB.CategoryId;
+            createNoteResponse.Category = (Enums.Category)createNoteResponse_DB.CategoryId;
             createNoteResponse.Title = createNoteResponse_DB.Title;
             createNoteResponse.TargetDate = createNoteResponse_DB.TargetDate;
 

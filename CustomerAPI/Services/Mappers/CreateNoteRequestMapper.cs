@@ -9,11 +9,6 @@ namespace NotesAPI.Services.Mappers
     }
     public class CreateNoteRequestMapper: ICreateNoteRequestMapper
     {
-        private readonly ICreateNoteRequestMapper _createNoteRequestMapper;
-        public CreateNoteRequestMapper(ICreateNoteRequestMapper createNoteRequest)
-        {
-            _createNoteRequestMapper = createNoteRequest;
-        }
         public Note CreateNoteRequestMap(CreateNoteRequest createNoteRequest)
         {
             Note noteRequest_DB = new Note();

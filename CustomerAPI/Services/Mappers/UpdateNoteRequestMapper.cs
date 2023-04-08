@@ -8,14 +8,8 @@ namespace NotesAPI.Services.Mappers
     {
         Note UpdateNoteRequestMap(UpdateNoteRequest updateNoteRequest);
     }
-    public class UpdateNoteRequestMapper
+    public class UpdateNoteRequestMapper : IUpdateNoteRequestMapper
     {
-        private readonly IUpdateNoteRequestMapper _updateNoteResponseMapper;
-        public UpdateNoteRequestMapper(IUpdateNoteRequestMapper updateNoteResponseMapper)
-        {
-            _updateNoteResponseMapper = updateNoteResponseMapper;
-        }
-
         public Note UpdateNoteRequestMap(UpdateNoteRequest updateNoteRequest)
         {
             Note noteRequest_DB = new Note();

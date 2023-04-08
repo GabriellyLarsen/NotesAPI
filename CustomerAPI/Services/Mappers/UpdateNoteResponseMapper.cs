@@ -8,20 +8,14 @@ namespace NotesAPI.Services.Mappers
     {
         UpdateNoteResponse UpdateNoteResponseMap(Note noteResponse_DB);
     }
-    public class UpdateNoteResponseMapper
+    public class UpdateNoteResponseMapper : IUpdateNoteResponseMapper
     {
-        private readonly IUpdateNoteResponseMapper _updateNoteResponseMapper;
-        public UpdateNoteResponseMapper(IUpdateNoteResponseMapper updateNoteResponseMapper)
-        {
-            _updateNoteResponseMapper = updateNoteResponseMapper;
-        }
-
         public UpdateNoteResponse UpdateNoteResponseMap(Note updateNoteResponse_DB)
         {
             UpdateNoteResponse updateNoteResponse = new UpdateNoteResponse();
 
             updateNoteResponse.NoteId = updateNoteResponse_DB.Id;
-            updateNoteResponse.Category = (Category)updateNoteResponse_DB.CategoryId;
+            updateNoteResponse.Category = (Enums.Category)updateNoteResponse_DB.CategoryId;
             updateNoteResponse.Title = updateNoteResponse_DB.Title;
             updateNoteResponse.TargetDate = updateNoteResponse_DB.TargetDate;
 

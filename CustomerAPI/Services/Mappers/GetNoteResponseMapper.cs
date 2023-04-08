@@ -6,29 +6,30 @@ namespace NotesAPI.Services.Mappers
 {
     public interface IGetNoteResponseMapper
     {
-        GetNoteResponse GetNoteResponseMap(Note noteResponse_DB);
+        List<GetNoteResponse> GetNoteResponseMap(List<Note> noteResponse_DB);
     }
 
-    public class GetNoteResponseMapper
+    public class GetNoteResponseMapper : IGetNoteResponseMapper
     {
-        private readonly IGetNoteResponseMapper _getNoteResponseMapper;
-        public GetNoteResponseMapper(IGetNoteResponseMapper getNoteResponseMapper)
+        public List<GetNoteResponse> GetNoteResponseMap(List<Note> noteResponse_DB)
         {
-            _getNoteResponseMapper = getNoteResponseMapper;
-        }
+            List<GetNoteResponse> noteResponseList = new List<GetNoteResponse>(); 
 
-        public GetNoteResponse GetNoteResponseMap(Note noteResponse_DB)
-        {
-            GetNoteResponse noteResponse = new GetNoteResponse();
+            foreach(Note response in noteResponse_DB)
+            {
+                GetNoteResponse noteResponse = new GetNoteResponse();
 
-            noteResponse.NoteId = noteResponse_DB.Id;
-            noteResponse.Category = (Category)noteResponse_DB.CategoryId;
-            noteResponse.Title = noteResponse_DB.Title;
-            noteResponse.TargetDate = noteResponse_DB.TargetDate;
-            noteResponse.LastUpdateDate = noteResponse_DB.LastUpdateDate;
-            noteResponse.Content = noteResponse_DB.Content;
+                noteResponse.NoteId = response.Id;
+                noteResponse.Category = (Enums.Category)response.CategoryId;
+                noteResponse.Title = response.Title;
+                noteResponse.TargetDate = response.TargetDate;
+                noteResponse.LastUpdateDate = response.LastUpdateDate;
+                noteResponse.Content = response.Content;
 
-            return noteResponse;
+                noteResponseList.Add(noteResponse);
+            }
+            
+            return noteResponseList;
         }
     }
 }
