@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NotesAPI.Models.Requests
 {
-    public class CreateNotesRequest
+    public class CreateNoteRequest
     {/// <summary>
      /// first create the entity, after that you do the models based on what you'd need
      /// for exercise, you could create another entity for change of schedules, 
