@@ -1,12 +1,10 @@
-﻿using NotesAPI.Enums;
-
-namespace NotesAPI.Models.Responses
+﻿namespace NotesAPI.Models.Requests
 {
-    public class CreateNoteResponse
+    public class UpdateNoteRequest
     {
-        public int NoteId { get; set; }
         public Category Category { get; set; }
         public string Title { get; set; }
         public DateTime? TargetDate { get; set; }
+        public string Content { get; set; }
     }
 }

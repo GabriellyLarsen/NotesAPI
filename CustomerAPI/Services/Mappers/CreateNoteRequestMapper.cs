@@ -5,7 +5,7 @@ namespace NotesAPI.Services.Mappers
 {
     public interface ICreateNoteRequestMapper
     {
-        Note CreateNoteRequestMap(CreateNoteRequest noteRequest);
+        Note CreateNoteRequestMap(CreateNoteRequest createNoteRequest);
     }
     public class CreateNoteRequestMapper: ICreateNoteRequestMapper
     {
@@ -14,14 +14,14 @@ namespace NotesAPI.Services.Mappers
         {
             _createNoteRequestMapper = createNoteRequest;
         }
-        public Note CreateNoteRequestMap(CreateNoteRequest noteRequest)
+        public Note CreateNoteRequestMap(CreateNoteRequest createNoteRequest)
         {
             Note noteRequest_DB = new Note();
 
-            noteRequest_DB.CategoryId = noteRequest.Category.GetHashCode();
-            noteRequest_DB.Title = noteRequest.Title;
-            noteRequest_DB.TargetDate = noteRequest.TargetDate;
-            noteRequest_DB.Content = noteRequest.Content;
+            noteRequest_DB.CategoryId = createNoteRequest.Category.GetHashCode();
+            noteRequest_DB.Title = createNoteRequest.Title;
+            noteRequest_DB.TargetDate = createNoteRequest.TargetDate;
+            noteRequest_DB.Content = createNoteRequest.Content;
             noteRequest_DB.CreatedDate = DateTime.Now;
             noteRequest_DB.LastUpdateDate = DateTime.Now;
 

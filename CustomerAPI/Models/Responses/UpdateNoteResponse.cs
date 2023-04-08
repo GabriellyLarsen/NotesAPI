@@ -2,7 +2,7 @@
 
 namespace NotesAPI.Models.Responses
 {
-    public class CreateNoteResponse
+    public class UpdateNoteResponse
     {
         public int NoteId { get; set; }
         public Category Category { get; set; }
