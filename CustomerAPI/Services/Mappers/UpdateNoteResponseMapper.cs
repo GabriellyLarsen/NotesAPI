@@ -18,6 +18,8 @@ namespace NotesAPI.Services.Mappers
             updateNoteResponse.Category = (Enums.Category)updateNoteResponse_DB.CategoryId;
             updateNoteResponse.Title = updateNoteResponse_DB.Title;
             updateNoteResponse.TargetDate = updateNoteResponse_DB.TargetDate;
+            updateNoteResponse.Content = updateNoteResponse_DB.Content;
+            updateNoteResponse.LastUpdateDate = DateTime.Now;
 
             return updateNoteResponse;
         }

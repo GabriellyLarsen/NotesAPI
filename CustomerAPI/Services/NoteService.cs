@@ -11,7 +11,7 @@ namespace NotesAPI.Services
         List<Note> GetNotesByTargetDate(DateTime targetDate);
         List<Note> GetNotesByCategory(Enums.Category category);
         Task<Note> AddNote(Note createNoteRequest);
-        Task<Note> UpdateNote(int noteId, Note createNoteRequest);
+        Task<Note> UpdateNote(int noteId, DateTime targetDate);
         void DeleteNote(int noteId);
     }
 
@@ -43,13 +43,13 @@ namespace NotesAPI.Services
             return createNoteRequest;
         }
 
-        public async Task<Note> UpdateNote(int noteId, Note updateNoteRequest)
+        public async Task<Note> UpdateNote(int noteId, DateTime targetDate)
         {
-            Note noteToUpdate = _appDbContext.Note.SingleOrDefault(x => x.Id == noteId);
-            noteToUpdate = updateNoteRequest;
+            Note noteToUpdate = _appDbContext.Note.First(x => x.Id == noteId);
+            noteToUpdate.TargetDate = targetDate;
             _appDbContext.SaveChanges();
 
-            return updateNoteRequest;
+            return noteToUpdate;
         }
 
         public void DeleteNote(int noteId)

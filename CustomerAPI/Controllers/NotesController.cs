@@ -39,17 +39,15 @@ namespace NotesAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post(CreateNoteRequest createNoteRequest)
         {
-            bool validation = GetValidationResult(createNoteRequest);
+            //bool validation = GetValidationResult(createNoteRequest);
 
-            if (!validation)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest);
-            }
+            //if (!validation)
+            //{
+            //    return StatusCode(StatusCodes.Status400BadRequest);
+            //}
 
             Note createNoteRequest_DB = _createNoteRequestMapper.CreateNoteRequestMap(createNoteRequest);
-
             Note createNoteResponse_DB = await _noteService.AddNote(createNoteRequest_DB);
-
             CreateNoteResponse createNoteResponse = _createNoteResponseMapper.CreateNoteResponseMap(createNoteResponse_DB);
 
             return new CreatedResult(string.Empty, createNoteResponse);
@@ -59,7 +57,6 @@ namespace NotesAPI.Controllers
         [Route("notes/getNotesByTargetDate")]
         public IActionResult GetByTargetDate(DateTime targetDate)
         {
-            //call to DB passing targetDate --> return in Note model
             List<Note> noteResponse_DB = _noteService.GetNotesByTargetDate(targetDate);
             List<GetNoteResponse> noteResponse = _getNoteResponseMapper.GetNoteResponseMap(noteResponse_DB);
 
@@ -71,7 +68,6 @@ namespace NotesAPI.Controllers
         public IActionResult GetByCategory(Enums.Category category)
         {
             List<Note> noteResponse_DB = _noteService.GetNotesByCategory(category);
-
             List<GetNoteResponse> noteResponse = _getNoteResponseMapper.GetNoteResponseMap(noteResponse_DB);
 
             return new CreatedResult(string.Empty, noteResponse);
@@ -80,13 +76,10 @@ namespace NotesAPI.Controllers
 
         [HttpPut]
         [Route("notes/updateNoteTargetDate")]
-        public async Task<IActionResult> UpdateNoteTargetDate(int noteId, UpdateNoteRequest updateNoteRequest)
+        public async Task<IActionResult> UpdateNoteTargetDate(int noteId, DateTime targetDate)
         {
 
-            Note updateNoteRequest_DB = _updateNoteRequestMapper.UpdateNoteRequestMap(updateNoteRequest);
-
-            Note updateNoteResponse_DB = await _noteService.UpdateNote(noteId, updateNoteRequest_DB);
-
+            Note updateNoteResponse_DB = await _noteService.UpdateNote(noteId, targetDate);
             UpdateNoteResponse updateNoteResponse = _updateNoteResponseMapper.UpdateNoteResponseMap(updateNoteResponse_DB);
 
             return new CreatedResult(string.Empty, updateNoteResponse);
@@ -97,12 +90,8 @@ namespace NotesAPI.Controllers
         [Route("notes/deleteNote")]
         public string DeleteNote(int noteId)
         {
-            try
-            {
-                _noteService.DeleteNote(noteId);
-                return $"Note {noteId} was deleted successfully";
-            }
-            catch (Exception ex) { return ex.Message; }
+            _noteService.DeleteNote(noteId);
+            return $"Note {noteId} was deleted successfully";
         }
 
         private bool GetValidationResult(CreateNoteRequest noteRequest)

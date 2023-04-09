@@ -7,9 +7,12 @@ namespace NotesAPI.Entities
     {
         [Key]
         public int Id { get; set; }
+        public int CategoryId { get; set; }
+        public Enums.Category Category => (Enums.Category)CategoryId;
 
         [Required]
-        public virtual Category Category { get; set; }
+        public virtual Category CategoryEntity { get; set; }
+        
         public string Title { get; set; }
         public DateTime CreatedDate { get; set; }
 

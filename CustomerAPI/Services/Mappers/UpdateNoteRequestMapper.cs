@@ -14,7 +14,6 @@ namespace NotesAPI.Services.Mappers
         {
             Note noteRequest_DB = new Note();
 
-            noteRequest_DB.Id = updateNoteRequest.NoteId;
             noteRequest_DB.CategoryId = updateNoteRequest.Category.GetHashCode();
             noteRequest_DB.Title = updateNoteRequest.Title;
             noteRequest_DB.TargetDate = updateNoteRequest.TargetDate;
