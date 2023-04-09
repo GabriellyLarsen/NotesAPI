@@ -6,6 +6,7 @@ using NotesAPI.Models.Responses;
 using NotesAPI.Repositories;
 using NotesAPI.Services;
 using NotesAPI.Services.Mappers;
+using System.Threading.Tasks;
 
 namespace NotesAPI.Controllers
 {
@@ -54,22 +55,21 @@ namespace NotesAPI.Controllers
             return new CreatedResult(string.Empty, createNoteResponse);
         }
 
-        //[HttpGet]
-        //[Route("notes/getNotesByTargetDate")]
-        //public IActionResult GetByTargetDate(DateTime targetDate)
-        //{
-        //    //call to DB passing targetDate --> return in Note model
-        //    List<Note> noteResponse_DB = new List<Note>();
-        //    GetNoteResponse noteResponse = _getNoteResponseMapper.GetNoteResponseMap(noteResponse_DB);
+        [HttpGet]
+        [Route("notes/getNotesByTargetDate")]
+        public IActionResult GetByTargetDate(DateTime targetDate)
+        {
+            //call to DB passing targetDate --> return in Note model
+            List<Note> noteResponse_DB = _noteService.GetNotesByTargetDate(targetDate);
+            List<GetNoteResponse> noteResponse = _getNoteResponseMapper.GetNoteResponseMap(noteResponse_DB);
 
-        //    return new CreatedResult(string.Empty, noteResponse);
-        //}
+            return new CreatedResult(string.Empty, noteResponse);
+        }
 
         [HttpGet]
         [Route("notes/getNotesByCategory")]
         public IActionResult GetByCategory(Enums.Category category)
         {
-
             List<Note> noteResponse_DB = _noteService.GetNotesByCategory(category);
 
             List<GetNoteResponse> noteResponse = _getNoteResponseMapper.GetNoteResponseMap(noteResponse_DB);
@@ -80,29 +80,30 @@ namespace NotesAPI.Controllers
 
         [HttpPut]
         [Route("notes/updateNoteTargetDate")]
-        public IActionResult UpdateNoteTargetDate(UpdateNoteRequest updateNoteRequest)
+        public async Task<IActionResult> UpdateNoteTargetDate(int noteId, UpdateNoteRequest updateNoteRequest)
         {
-            
-            Note createNoteRequest_DB = _updateNoteRequestMapper.UpdateNoteRequestMap(updateNoteRequest);
 
-            // call to DB passing noteRequest_DB -->  var response = _appDbContext.Add(noteRequest_DB);
+            Note updateNoteRequest_DB = _updateNoteRequestMapper.UpdateNoteRequestMap(updateNoteRequest);
 
-            //later the response will come from the DB I want all the info that was updated to came here as DB response.
+            Note updateNoteResponse_DB = await _noteService.UpdateNote(noteId, updateNoteRequest_DB);
 
-            Note updateNoteResponse_DB = new Note();
             UpdateNoteResponse updateNoteResponse = _updateNoteResponseMapper.UpdateNoteResponseMap(updateNoteResponse_DB);
-
 
             return new CreatedResult(string.Empty, updateNoteResponse);
 
         }
 
-        //[HttpPut]
-        //[Route("notes/deleteNote")]
-        //public IActionResult DeleteNote()
-        //{
-
-        //}
+        [HttpPut]
+        [Route("notes/deleteNote")]
+        public string DeleteNote(int noteId)
+        {
+            try
+            {
+                _noteService.DeleteNote(noteId);
+                return $"Note {noteId} was deleted successfully";
+            }
+            catch (Exception ex) { return ex.Message; }
+        }
 
         private bool GetValidationResult(CreateNoteRequest noteRequest)
         {
