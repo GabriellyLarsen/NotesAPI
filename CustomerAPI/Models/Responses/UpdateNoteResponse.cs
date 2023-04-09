@@ -10,5 +10,6 @@ namespace NotesAPI.Models.Responses
         public DateTime? TargetDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
         public string Content { get; set; }
+        public Result Result { get; set; }
     }
 }

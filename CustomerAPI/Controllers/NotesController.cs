@@ -6,6 +6,7 @@ using NotesAPI.Models.Responses;
 using NotesAPI.Repositories;
 using NotesAPI.Services;
 using NotesAPI.Services.Mappers;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace NotesAPI.Controllers
@@ -39,13 +40,6 @@ namespace NotesAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post(CreateNoteRequest createNoteRequest)
         {
-            //bool validation = GetValidationResult(createNoteRequest);
-
-            //if (!validation)
-            //{
-            //    return StatusCode(StatusCodes.Status400BadRequest);
-            //}
-
             Note createNoteRequest_DB = _createNoteRequestMapper.CreateNoteRequestMap(createNoteRequest);
             Note createNoteResponse_DB = await _noteService.AddNote(createNoteRequest_DB);
             CreateNoteResponse createNoteResponse = _createNoteResponseMapper.CreateNoteResponseMap(createNoteResponse_DB);
@@ -60,7 +54,12 @@ namespace NotesAPI.Controllers
             List<Note> noteResponse_DB = _noteService.GetNotesByTargetDate(targetDate);
             List<GetNoteResponse> noteResponse = _getNoteResponseMapper.GetNoteResponseMap(noteResponse_DB);
 
-            return new CreatedResult(string.Empty, noteResponse);
+            if(noteResponse.Any())
+            {
+                return new CreatedResult(string.Empty, noteResponse);
+            }
+
+            return new CreatedResult(string.Empty, $"Unable to complete the operation. There is no Notes for date {targetDate}.");
         }
 
         [HttpGet]
@@ -70,7 +69,12 @@ namespace NotesAPI.Controllers
             List<Note> noteResponse_DB = _noteService.GetNotesByCategory(category);
             List<GetNoteResponse> noteResponse = _getNoteResponseMapper.GetNoteResponseMap(noteResponse_DB);
 
-            return new CreatedResult(string.Empty, noteResponse);
+            if (noteResponse.Any())
+            {
+                return new CreatedResult(string.Empty, noteResponse);
+            }
+
+            return new CreatedResult(string.Empty, $"Unable to complete the operation. There is no Notes for date {category}.");
 
         }
 
@@ -78,11 +82,26 @@ namespace NotesAPI.Controllers
         [Route("notes/updateNoteTargetDate")]
         public async Task<IActionResult> UpdateNoteTargetDate(int noteId, DateTime targetDate)
         {
+            UpdateNoteResponse updateNoteResponse = new UpdateNoteResponse();
+            try
+            {
+                Note updateNoteResponse_DB = await _noteService.UpdateNote(noteId, targetDate);
+                updateNoteResponse = _updateNoteResponseMapper.UpdateNoteResponseMap(updateNoteResponse_DB);
 
-            Note updateNoteResponse_DB = await _noteService.UpdateNote(noteId, targetDate);
-            UpdateNoteResponse updateNoteResponse = _updateNoteResponseMapper.UpdateNoteResponseMap(updateNoteResponse_DB);
+                return new CreatedResult(string.Empty, updateNoteResponse);
+            }
+            catch (Exception ex) 
+            {
 
-            return new CreatedResult(string.Empty, updateNoteResponse);
+                Result result = new Result()
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = $"Unable to complete the operation. Note {noteId} does not exist."
+                };
+                updateNoteResponse.Result = result;
+
+                return new CreatedResult(string.Empty, updateNoteResponse); 
+            }
 
         }
 
@@ -90,24 +109,13 @@ namespace NotesAPI.Controllers
         [Route("notes/deleteNote")]
         public string DeleteNote(int noteId)
         {
-            _noteService.DeleteNote(noteId);
-            return $"Note {noteId} was deleted successfully";
-        }
-
-        private bool GetValidationResult(CreateNoteRequest noteRequest)
-        {
-            bool isValid = true;
-
-            Enums.Category category = noteRequest.Category; 
-            string title = noteRequest.Title;
-            DateTime? targetDate = noteRequest.TargetDate;
-
-            if (string.IsNullOrEmpty(category.ToString()) || string.IsNullOrEmpty(title) || !targetDate.HasValue)
+            try
             {
-                isValid = false;
+                _noteService.DeleteNote(noteId);
+                return $"Note {noteId} was successfully deleted.";
             }
-
-            return isValid;
+            catch (Exception ex) { return ex.Message; }
+            
         }
 
     }

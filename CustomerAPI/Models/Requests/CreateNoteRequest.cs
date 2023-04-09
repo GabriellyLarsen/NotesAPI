@@ -11,8 +11,12 @@ namespace NotesAPI.Models.Requests
     {
         [Required]
         [JsonConverter(typeof(StringEnumConverter))]
-        public Category Category { get; set; } 
+        public Category Category { get; set; }
+
+        [Required]
         public string Title { get; set; }
+
+        [Required]
         public DateTime? TargetDate { get; set; }
         public string Content { get; set; }
 

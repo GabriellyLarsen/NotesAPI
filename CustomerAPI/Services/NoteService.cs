@@ -45,21 +45,34 @@ namespace NotesAPI.Services
 
         public async Task<Note> UpdateNote(int noteId, DateTime targetDate)
         {
-            Note noteToUpdate = _appDbContext.Note.First(x => x.Id == noteId);
-            noteToUpdate.TargetDate = targetDate;
-            _appDbContext.SaveChanges();
+            try
+            {
+                Note noteToUpdate = _appDbContext.Note.First(x => x.Id == noteId);
+                noteToUpdate.TargetDate = targetDate;
+                _appDbContext.SaveChanges();
 
-            return noteToUpdate;
+                return noteToUpdate;
+            }
+            catch
+            {
+                throw new Exception($"Unable to complete the operation. Note {noteId} does not exist.");
+            }
+
         }
 
         public void DeleteNote(int noteId)
         {
-            Note noteToDelete = _appDbContext.Note.First(x => x.Id == noteId);
-            if (noteToDelete != null)
+            try
             {
+                Note noteToDelete = _appDbContext.Note.First(x => x.Id == noteId);
                 _appDbContext.Note.Remove(noteToDelete);
                 _appDbContext.SaveChanges();
             }
+            catch
+            {
+                throw new Exception($"Unable to complete the operation. Note {noteId} does not exist.");
+            }
+            
         }
     }
 }

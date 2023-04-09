@@ -12,7 +12,7 @@ namespace NotesAPI.Entities
 
         [Required]
         public virtual Category CategoryEntity { get; set; }
-        
+        [Required]
         public string Title { get; set; }
         public DateTime CreatedDate { get; set; }
 
